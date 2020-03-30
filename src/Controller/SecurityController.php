@@ -6,9 +6,45 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use App\Entity\User;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\Request;
 
 class SecurityController extends AbstractController
 {
+     /**
+      * @Route("/registration", name="registration")
+      */
+
+    public function new(Request $request)
+    {
+        $user = new User();
+
+        $form = $this->createFormBuilder($user)
+            ->add('email', EmailType::class)
+            ->add('password', PasswordType::class)
+            ->add('save', SubmitType::class, ['label' => 'To register'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $form->getData();
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_login');
+        }
+
+        return $this->render('security/autorization.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
     /**
      * @Route("/login", name="app_login")
      */
