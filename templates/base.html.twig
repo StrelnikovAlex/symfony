@@ -8,9 +8,13 @@
     </head>
     <body>
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="{{ path('app_login') }}">LOG IN</a>
         {% if app.user %}
         <a class="navbar-brand"> Current user: {{ app.user.email }}</a>
+        <li class="nav-link">
+          <a class="navbar-link" href="{{ path('app_logout') }}">LOG OUT</a>
+        </li>
+        {% else %}
+        <a class="navbar-brand" href="{{ path('app_login') }}">LOG IN</a>
         {% endif %}
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -22,9 +26,6 @@
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#">My Stuff</a>
-                </li>
-                <li class="nav-item">
-                  <a class="navbar-brand" href="{{ path('app_logout') }}">LOG OUT</a>
                 </li>
               </ul>
             </div>
