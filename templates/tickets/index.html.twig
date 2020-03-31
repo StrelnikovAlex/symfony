@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tickets index{% endblock %}
+
+{% block body %}
+    <h1>Tickets index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Description</th>
+                <th>File</th>
+                <th>File_name</th>
+                <th>Created_at</th>
+                <th>Updated_at</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ticket in tickets %}
+            <tr>
+                <td>{{ ticket.id }}</td>
+                <td>{{ ticket.title }}</td>
+                <td>{{ ticket.type }}</td>
+                <td>{{ ticket.status }}</td>
+                <td>{{ ticket.description }}</td>
+                <td>{{ ticket.file }}</td>
+                <td>{{ ticket.fileName }}</td>
+                <td>{{ ticket.createdAt ? ticket.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ ticket.updatedAt ? ticket.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('tickets_show', {'id': ticket.id}) }}">show</a>
+                    <a href="{{ path('tickets_edit', {'id': ticket.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('tickets_new') }}">Create new</a>
+{% endblock %}

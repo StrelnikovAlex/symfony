@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Repository\TicketsRepository;
 
 /**
   * @IsGranted("ROLE_USER")
@@ -53,10 +54,11 @@ class ProjectsController extends AbstractController
     /**
      * @Route("/{id}", name="projects_show", methods={"GET"})
      */
-    public function show(Projects $project): Response
+    public function show(Projects $project, TicketsRepository $ticketsRepository): Response
     {
         return $this->render('projects/show.html.twig', [
             'project' => $project,
+            'tickets' => $ticketsRepository,
         ]);
     }
 

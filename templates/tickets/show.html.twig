@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tickets{% endblock %}
+
+{% block body %}
+    <h1>Tickets</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ ticket.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ ticket.title }}</td>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <td>{{ ticket.type }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ ticket.status }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ ticket.description }}</td>
+            </tr>
+            <tr>
+                <th>File</th>
+                <td>{{ ticket.file }}</td>
+            </tr>
+            <tr>
+                <th>File_name</th>
+                <td>{{ ticket.fileName }}</td>
+            </tr>
+            <tr>
+                <th>Created_at</th>
+                <td>{{ ticket.createdAt ? ticket.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Updated_at</th>
+                <td>{{ ticket.updatedAt ? ticket.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('tickets_index') }}">back to list</a>
+
+    <a href="{{ path('tickets_edit', {'id': ticket.id}) }}">edit</a>
+
+    {{ include('tickets/_delete_form.html.twig') }}
+{% endblock %}

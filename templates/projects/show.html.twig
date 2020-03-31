@@ -31,4 +31,43 @@
     <a href="{{ path('projects_edit', {'id': project.id}) }}">edit</a>
 
     {{ include('projects/_delete_form.html.twig') }}
+
+    <h1>Tickets</h1>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Desription</th>
+                <th>File</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ticket in project.tickets %}
+            <tr>
+                <td>{{ ticket.id }}</td>
+                <td>{{ ticket.title }}</td>
+                <td>{{ ticket.type }}</td>
+                <td>{{ ticket.status }}</td>
+                <td>{{ ticket.desription }}</td>
+                <td><a href="{{ asset('uploads/file/' ~ ticket.file) }}">{{ ticket.FileName }}</a></td>
+                <td>
+                    <a href="{{ path('tickets_show', {'project_id': project.id, 'id': ticket.id}) }}">show</a>
+                    {% if app.user.id == ticket.creator.id %}
+                    <a href="{{ path('tickets_edit', {'project_id': project.id, 'id': ticket.id}) }}">edit</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <a class="btn btn-success" href="{{ path('tickets_new', {'project_id': project.id}) }}">Create new</a>
 {% endblock %}
