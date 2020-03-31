@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
+  * @IsGranted("ROLE_USER")
   * @Route("/projects")
  */
 class ProjectsController extends AbstractController
