@@ -17,7 +17,7 @@ class Tickets
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\projects", inversedBy="tickets")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Projects", inversedBy="tickets")
      * @ORM\JoinColumn(nullable=false)
      */
     private $project_id;
