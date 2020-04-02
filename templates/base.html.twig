@@ -10,9 +10,7 @@
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         {% if app.user %}
         <a class="navbar-brand"> Current user: {{ app.user.email }}</a>
-        <li class="nav-link">
-          <a class="navbar-link" href="{{ path('app_logout') }}">LOG OUT</a>
-        </li>
+        <a class="navbar-link" href="{{ path('app_logout') }}">LOG OUT</a>
         {% else %}
         <a class="navbar-brand" href="{{ path('app_login') }}">LOG IN</a>
         {% endif %}

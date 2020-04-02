@@ -58,7 +58,7 @@ class ProjectsController extends AbstractController
     {
         return $this->render('projects/show.html.twig', [
             'project' => $project,
-            'tickets' => $ticketsRepository,
+            'tickets' => $ticketsRepository->findAll(),
         ]);
     }
 
