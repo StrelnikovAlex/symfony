@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Tickets;
 use App\Entity\Projects;
+use App\Entity\Comment;
 use App\Form\TicketsType;
 use App\Repository\TicketsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,6 +13,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Form\ProjectsType;
 use App\Repository\ProjectsRepository;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\EntityType;
 
 /**
  * @Route("/tickets")
@@ -56,13 +61,38 @@ class TicketsController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="tickets_show", methods={"GET"})
+     * @Route("/{id}", name="tickets_show", methods={"GET", "POST"})
      */
-    public function show(Tickets $ticket): Response
+    public function show(Request $request, Tickets $ticket): Response
     {
-        return $this->render('tickets/show.html.twig', [
-            'ticket' => $ticket,
-        ]);
+      $comment = new Comment();
+      $ticketId = $request->attributes->get('id');
+
+      $commentForm = $this->createFormBuilder($comment)
+           ->add('text', TextareaType::class, ['label' => 'New Comment'])
+           ->getForm();
+
+       $commentForm->handleRequest($request);
+
+       if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+           $comment = $commentForm->getData();
+           $entityManager = $this->getDoctrine()->getManager();
+
+           $comment->setTicket($ticket);
+
+           $entityManager->persist($ticket);
+           $entityManager->persist($comment);
+           $entityManager->flush();
+
+           echo $ticketId;
+
+
+           return $this->redirectToRoute('tickets_show', ['id' => $ticketId]);
+       }
+            return $this->render('tickets/show.html.twig', [
+                   'ticket' => $ticket,
+                   'comment_form' => $commentForm->createView(),
+                   ]);
     }
 
     /**
@@ -96,6 +126,27 @@ class TicketsController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('tickets_index');
+        return $this->redirectToRoute('tickets_show', ['id' => $ticketId]);
+    }
+
+    /**
+     * @Route("/{id}/delete_comment", name="comment_delete")
+     */
+    public function delete_comment(Request $request, $id): Response
+    {
+        $ticketId = $request->query->get('ticket_id');
+        $entityManager = $this->getDoctrine()->getManager();
+        $comment = $entityManager->getRepository(Comment::class)->find($id);
+
+        if (!$comment) {
+            throw $this->createNotFoundException(
+                'No comment found for id '.$id
+            );
+        }
+
+        $entityManager->remove($comment);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('tickets_show', ['id' => $ticketId]);
     }
 }

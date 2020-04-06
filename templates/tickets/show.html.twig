@@ -51,4 +51,29 @@
     <a href="{{ path('tickets_edit', {'id': ticket.id}) }}">edit</a>
 
     {{ include('tickets/_delete_form.html.twig') }}
+
+    <h1 align="center">
+    Comments
+    </h1>
+
+    {% for comment in ticket.comments %}
+
+    <div class="my-3">
+    <div align="center" class="mx-auto" style="width: 400px;">
+    <div align="justify">
+        <p>{{ comment.text }}</p>
+        <p align="right"><a class="btn btn-outline-secondary btn-sm" href="{{ path('comment_delete', {'id': comment.id, 'ticket_id': ticket.id}) }}" role="button">Delete</a></p>
+    </div>
+    </div>
+    </div>
+    {% endfor %}
+    <div align="center" class="mx-auto" style="width: 400px;">
+      <h3>{{ form_start(comment_form) }}
+    {{ form_widget(comment_form) }}</h3>
+    <div align="right" class="mb-5">
+        <button  class="btn btn-outline-secondary btn-sm">{{ button_label|default('Submit') }}</button>
+    </div>
+{{ form_end(comment_form) }}
+    </div>
+
 {% endblock %}
