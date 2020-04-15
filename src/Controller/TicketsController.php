@@ -51,10 +51,8 @@ class TicketsController extends AbstractController
             $ticket->setProjectId($project);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($ticket);
-            $entityManager->flush();
-            $tags_string = $request->request->get('ticket')['tags'];
 
-            $tags_string = $request->request->get('ticket')['tags'];
+            $tags_string = $request->request->get('tickets')['tags'];
             $tags = array_map(function ($value) {
                 return trim($value);
             }, explode(',', $tags_string));
@@ -70,7 +68,9 @@ class TicketsController extends AbstractController
                     $tag->setName($tagName);
                     $entityManager->persist($tag);
                     $ticket->addTag($tag);
+
                 }
+                $entityManager->flush();
             }
 
 
@@ -125,11 +125,37 @@ class TicketsController extends AbstractController
     {
         $form = $this->createForm(TicketsType::class, $ticket);
         $form->handleRequest($request);
+        $tags_string = $request->request->get('tickets')['tags'];
+
+        $tags = array_map(function ($value) {
+            return trim($value);
+        }, explode(',', $tags_string));
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+
+            foreach($ticket->getTags() as $tag) {
+                $ticket->removeTag($tag);
+            }
+
+            foreach ($tags as $tagName) {
+
+                $tag = new Tag();
+                $has_tag = $entityManager->getRepository(Tag::class)->findOneBy(
+                    ['name' => $tagName]
+                );
+                if ($has_tag) {
+                    $ticket->addTag($has_tag);
+                } else {
+
+                    $tag->setName($tagName);
+                    $entityManager->persist($tag);
+                    $ticket->addTag($tag);
+                }
+            }
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('tickets_index');
+           return $this->redirectToRoute('tickets_index');
         }
 
         return $this->render('tickets/edit.html.twig', [

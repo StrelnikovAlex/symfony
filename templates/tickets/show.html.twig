@@ -39,15 +39,7 @@
                 <th>File_name</th>
                 <td>{{ ticket.fileName }}</td>
             </tr>
-            <tr>
-                <th>Created_at</th>
-                <td>{{ ticket.createdAt ? ticket.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Updated_at</th>
-                <td>{{ ticket.updatedAt ? ticket.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
+          </tbody>
     </table>
 
     <!-- <a href="{{ path('tickets_show', {'id': ticket.id}) }}">back to list</a> -->
