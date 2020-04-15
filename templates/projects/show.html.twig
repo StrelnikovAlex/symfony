@@ -10,25 +10,24 @@
             <tr align="center">
                 <th>Id</th>
                 <th>Name</th>
-                <th>Created_at</th>
-                <th>Updated_at</th>
-              </tr>
+            </tr>
         </thead>
           <tbody>
             <tr align="center">
                 <td>{{ project.id }}</td>
                 <td>{{ project.name }}</td>
-                <td>{{ project.createdAt ? project.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ project.updatedAt ? project.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-              </tr>
+            </tr>
           </tbody>
     </table>
 
-    <a href="{{ path('projects_index') }}">back to list</a>
+    <div align="center">
+    <a class="btn btn-success" href="{{ path('projects_index') }}">back to list </a>
 
-    <a href="{{ path('projects_edit', {'id': project.id}) }}">edit</a>
+    <a class="btn btn-success" href="{{ path('projects_edit', {'id': project.id}) }}">edit</a>
+    </div>
 
     {{ include('projects/_delete_form.html.twig') }}
+
 
     <h1 align = center>Tickets owned by</h1>
 
@@ -71,5 +70,9 @@
         {% endfor %}
         </tbody>
     </table>
-    <a class="btn btn-success" href="{{ path('tickets_new', {'project_id': project.id}) }}">Create new</a>
+
+    <div align="center">
+      <a class="btn btn-success" href="{{ path('tickets_new', {'project_id': project.id}) }}">Create new</a>
+    </div>
+
 {% endblock %}

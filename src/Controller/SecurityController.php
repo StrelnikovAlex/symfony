@@ -25,6 +25,7 @@ class SecurityController extends AbstractController
         $user = new User();
 
         $form = $this->createFormBuilder($user)
+            ->add('name', TextType::class)
             ->add('email', EmailType::class)
             ->add('password', PasswordType::class)
             ->add('save', SubmitType::class, ['label' => 'Register'])

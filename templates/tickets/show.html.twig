@@ -52,7 +52,8 @@
 
     <!-- <a href="{{ path('tickets_show', {'id': ticket.id}) }}">back to list</a> -->
 
-    <a href="{{ path('tickets_edit', {'id': ticket.id}) }}">EDIT</a>
+    <a class="btn btn-success" href="{{ path('tickets_edit', {'id': ticket.id}) }}">EDIT</a>
+
     {{ include('tickets/_delete_form.html.twig') }}
 
     <h1 align="center">
@@ -74,7 +75,7 @@
       <h3>{{ form_start(comment_form) }}
     {{ form_widget(comment_form) }}</h3>
     <div align="right" class="mb-5">
-        <button  class="btn btn-outline-secondary btn-sm">{{ button_label|default('Submit') }}</button>
+        <button  class="btn btn-success">{{ button_label|default('leave a comment') }}</button>
     </div>
 {{ form_end(comment_form) }}
     </div>

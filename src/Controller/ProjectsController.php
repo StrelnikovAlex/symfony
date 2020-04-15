@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Projects;
+use App\Entity\User;
 use App\Form\ProjectsType;
 use App\Repository\ProjectsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,12 +35,16 @@ class ProjectsController extends AbstractController
     public function new(Request $request): Response
     {
         $project = new Projects();
+        $creator = $this->getUser()->getId();
         $form = $this->createForm(ProjectsType::class, $project);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            $user = $entityManager->getRepository(User::class)->find($creator);
+            $project -> setCreator($user);
             $entityManager->persist($project);
+            $entityManager->persist($user);
             $entityManager->flush();
 
             return $this->redirectToRoute('projects_index');

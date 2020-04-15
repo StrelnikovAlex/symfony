@@ -3,11 +3,19 @@
 {% block title %}Edit Tickets{% endblock %}
 
 {% block body %}
-    <h1>Edit Tickets</h1>
+
+<div align="center" class="mx-auto" style="width: 300px;">
+    <div class="card border-secondary mb-3" style="width: 14rem;">
+    </div>
+    <div class="card-body text-secondary">
+        <h2 class="card-text">Edit Tickets</h2>
+    </div>
+
 
     {{ include('tickets/_form.html.twig', {'button_label': 'Update'}) }}
 
     <a href="{{ path('tickets_index') }}">back to list</a>
 
     {{ include('tickets/_delete_form.html.twig') }}
+
 {% endblock %}

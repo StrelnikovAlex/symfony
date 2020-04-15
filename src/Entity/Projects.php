@@ -23,20 +23,17 @@ class Projects
      */
     private $name;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $created_at;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $updated_at;
-
-    /**
+     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Tickets", mappedBy="project_id", orphanRemoval=true)
      */
     private $tickets;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="projects")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $creator;
+
 
     public function __construct()
     {
@@ -60,31 +57,7 @@ class Projects
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $created_at): self
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updated_at;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updated_at): self
-    {
-        $this->updated_at = $updated_at;
-
-        return $this;
-    }
-
-    /**
+     /**
      * @return Collection|Tickets[]
      */
     public function getTickets(): Collection
@@ -111,6 +84,18 @@ class Projects
                 $ticket->setProjectId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreator(): ?user
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?user $creator): self
+    {
+        $this->creator = $creator;
 
         return $this;
     }

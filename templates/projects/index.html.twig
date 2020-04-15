@@ -9,9 +9,8 @@
         <thead>
             <tr align="center">
                 <th>Id</th>
+                <th>Creator</th>
                 <th>Name</th>
-                <th>Created_at</th>
-                <th>Updated_at</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -19,9 +18,8 @@
         {% for project in projects %}
             <tr align="center">
                 <td>{{ project.id }}</td>
+                <td>{{ project.creator.name }}</td>
                 <td>{{ project.name }}</td>
-                <td>{{ project.createdAt ? project.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ project.updatedAt ? project.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                     <a href="{{ path('projects_show', {'id': project.id}) }}">show</a>
                     <a href="{{ path('projects_edit', {'id': project.id}) }}">edit</a>
@@ -35,5 +33,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('projects_new') }}">Create new</a>
+    <a class="btn btn-success" href="{{ path('projects_new') }}">Create new</a>
 {% endblock %}
