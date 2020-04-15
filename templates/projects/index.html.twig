@@ -7,7 +7,7 @@
 
     <table class="table table-dark">
         <thead>
-            <tr>
+            <tr align="center">
                 <th>Id</th>
                 <th>Name</th>
                 <th>Created_at</th>
@@ -17,7 +17,7 @@
         </thead>
         <tbody>
         {% for project in projects %}
-            <tr>
+            <tr align="center">
                 <td>{{ project.id }}</td>
                 <td>{{ project.name }}</td>
                 <td>{{ project.createdAt ? project.createdAt|date('Y-m-d H:i:s') : '' }}</td>

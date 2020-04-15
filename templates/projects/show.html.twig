@@ -6,24 +6,22 @@
     <h1 align = center>Project</h1>
 
       <table class="table table-dark">
-        <tbody>
-            <tr>
+        <thead>
+            <tr align="center">
                 <th>Id</th>
-                <td>{{ project.id }}</td>
-            </tr>
-            <tr>
                 <th>Name</th>
-                <td>{{ project.name }}</td>
-            </tr>
-            <tr>
                 <th>Created_at</th>
-                <td>{{ project.createdAt ? project.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
                 <th>Updated_at</th>
+              </tr>
+        </thead>
+          <tbody>
+            <tr align="center">
+                <td>{{ project.id }}</td>
+                <td>{{ project.name }}</td>
+                <td>{{ project.createdAt ? project.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ project.updatedAt ? project.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
+              </tr>
+          </tbody>
     </table>
 
     <a href="{{ path('projects_index') }}">back to list</a>
@@ -36,24 +34,30 @@
 
     <table class="table table-dark">
         <thead>
-            <tr>
+            <tr align="center">
                 <th>Id</th>
                 <th>Title</th>
                 <th>Type</th>
                 <th>Status</th>
                 <th>Desription</th>
+                <th>Tags</th>
                 <th>File</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for ticket in project.tickets %}
-            <tr>
+            <tr align="center">
                 <td>{{ ticket.id }}</td>
                 <td>{{ ticket.title }}</td>
                 <td>{{ ticket.type }}</td>
                 <td>{{ ticket.status }}</td>
                 <td>{{ ticket.description }}</td>
+                <td>
+                {% for tag in ticket.tags %}
+                {{ tag.name }}&ensp;
+                {% endfor %}
+                </td>
                 <td><a href="{{ asset('uploads/file/' ~ ticket.file) }}">{{ ticket.FileName }}</a></td>
                 <td>
                     <a href="{{ path('tickets_show', {'project_id': project.id, 'id': ticket.id}) }}">show</a>

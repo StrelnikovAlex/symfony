@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Tickets;
+use App\Entity\Tag;
 use App\Entity\Projects;
 use App\Entity\Comment;
 use App\Form\TicketsType;
@@ -17,8 +18,10 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\EntityType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
+ * @IsGranted("ROLE_USER")
  * @Route("/tickets")
  */
 class TicketsController extends AbstractController
@@ -49,6 +52,26 @@ class TicketsController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($ticket);
             $entityManager->flush();
+            $tags_string = $request->request->get('ticket')['tags'];
+
+            $tags_string = $request->request->get('ticket')['tags'];
+            $tags = array_map(function ($value) {
+                return trim($value);
+            }, explode(',', $tags_string));
+            foreach ($tags as $tagName) {
+                $tag = new Tag();
+                $has_tag = $entityManager->getRepository(Tag::class)->findOneBy(
+                    ['name' => $tagName]
+                );
+                if ($has_tag) {
+                    $ticket->addTag($has_tag);
+                } else {
+
+                    $tag->setName($tagName);
+                    $entityManager->persist($tag);
+                    $ticket->addTag($tag);
+                }
+            }
 
 
             return $this->redirectToRoute('projects_show', ['id' => $projectId]);
@@ -126,7 +149,7 @@ class TicketsController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('tickets_show', ['id' => $ticketId]);
+        return $this->redirectToRoute('tickets_index');
     }
 
     /**

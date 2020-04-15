@@ -7,14 +7,14 @@
 
     <table class="table">
         <thead>
-            <tr>
+            <tr align="center">
                 <th>Id</th>
                 <th>Title</th>
                 <th>Type</th>
                 <th>Status</th>
                 <th>Description</th>
+                <th>Tags</th>
                 <th>File</th>
-                <th>File_name</th>
                 <th>Created_at</th>
                 <th>Updated_at</th>
                 <th>actions</th>
@@ -22,14 +22,18 @@
         </thead>
         <tbody>
         {% for ticket in tickets %}
-            <tr>
+            <tr align="center">
                 <td>{{ ticket.id }}</td>
                 <td>{{ ticket.title }}</td>
                 <td>{{ ticket.type }}</td>
                 <td>{{ ticket.status }}</td>
                 <td>{{ ticket.description }}</td>
+                <td>
+                {% for tag in ticket.tags %}
+                {{ tag.name }}&ensp;
+                {% endfor %}
+                </td>
                 <td>{{ ticket.file }}</td>
-                <td>{{ ticket.fileName }}</td>
                 <td>{{ ticket.createdAt ? ticket.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ ticket.updatedAt ? ticket.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
