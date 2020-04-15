@@ -25,9 +25,7 @@ final class Version20200406124312 extends AbstractMigration
         $this->addSql('CREATE TABLE comment (id INT AUTO_INCREMENT NOT NULL, ticket_id INT NOT NULL, INDEX IDX_9474526C700047D2 (ticket_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE comment ADD CONSTRAINT FK_9474526C700047D2 FOREIGN KEY (ticket_id) REFERENCES tickets (id)');
         $this->addSql('ALTER TABLE tickets DROP FOREIGN KEY FK_54469DF46C1197C9');
-        $this->addSql('ALTER TABLE tickets CHANGE created_at created_at DATETIME NOT NULL, CHANGE updated_at updated_at DATETIME NOT NULL');
         $this->addSql('ALTER TABLE tickets ADD CONSTRAINT FK_54469DF46C1197C9 FOREIGN KEY (project_id_id) REFERENCES projects (id)');
-        $this->addSql('ALTER TABLE projects CHANGE created_at created_at DATETIME NOT NULL, CHANGE updated_at updated_at DATETIME NOT NULL');
     }
 
     public function down(Schema $schema) : void
@@ -36,9 +34,7 @@ final class Version20200406124312 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('DROP TABLE comment');
-        $this->addSql('ALTER TABLE projects CHANGE created_at created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL, CHANGE updated_at updated_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL');
         $this->addSql('ALTER TABLE tickets DROP FOREIGN KEY FK_54469DF46C1197C9');
-        $this->addSql('ALTER TABLE tickets CHANGE created_at created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL, CHANGE updated_at updated_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL');
         $this->addSql('ALTER TABLE tickets ADD CONSTRAINT FK_54469DF46C1197C9 FOREIGN KEY (project_id_id) REFERENCES projects (id) ON UPDATE CASCADE ON DELETE CASCADE');
     }
 }
