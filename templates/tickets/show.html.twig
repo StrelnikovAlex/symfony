@@ -61,7 +61,7 @@
     <div class="my-3">
     <div align="center" class="mx-auto" style="width: 400px;">
     <div align="justify">
-        <p>{{ comment.text }}</p>
+        <p>{{ ticket.creator.name }} wrote a comment: {{ comment.text }}</p>
         <p align="right"><a class="btn btn-outline-secondary btn-sm" href="{{ path('comment_delete', {'id': comment.id, 'ticket_id': ticket.id}) }}" role="button">Delete</a></p>
     </div>
     </div>

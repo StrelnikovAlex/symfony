@@ -22,7 +22,10 @@
                 <td>{{ project.name }}</td>
                 <td>
                     <a href="{{ path('projects_show', {'id': project.id}) }}">show</a>
+
+                    {% if is_granted('ROLE_USER_' ~ project.creator.id) or is_granted('ROLE_ADMIN') %}
                     <a href="{{ path('projects_edit', {'id': project.id}) }}">edit</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}

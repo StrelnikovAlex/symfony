@@ -23,7 +23,7 @@ class SecurityController extends AbstractController
     public function new(Request $request, UserPasswordEncoderInterface $encoder)
     {
         $user = new User();
-
+        
         $form = $this->createFormBuilder($user)
             ->add('name', TextType::class)
             ->add('email', EmailType::class)
