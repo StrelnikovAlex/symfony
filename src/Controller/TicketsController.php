@@ -6,6 +6,7 @@ use App\Entity\Tickets;
 use App\Entity\Tag;
 use App\Entity\Projects;
 use App\Entity\Comment;
+use App\Entity\User;
 use App\Form\TicketsType;
 use App\Repository\TicketsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,6 +32,11 @@ class TicketsController extends AbstractController
      */
     public function index(TicketsRepository $ticketsRepository): Response
     {
+      $creator = $this->getUser()->getId();
+      $users = $this->getDoctrine()
+            ->getRepository(User::class)
+            ->findAll();
+
         return $this->render('tickets/index.html.twig', [
             'tickets' => $ticketsRepository->findAll(),
         ]);
@@ -41,18 +47,27 @@ class TicketsController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $creator = $this->getUser()->getId();
         $projectId = $request->query->get('project_id');
         $ticket = new Tickets();
         $form = $this->createForm(TicketsType::class, $ticket);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
             $project = $this->getDoctrine()->getRepository(Projects::class)->find($projectId);
+            $creator = $entityManager->getRepository(User::class)->find($this->getUser()->getId());
+
             $ticket->setProjectId($project);
+            $ticket->setCreator($creator);
+
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($ticket);
+            $entityManager->persist($creator);
 
             $tags_string = $request->request->get('tickets')['tags'];
+
             $tags = array_map(function ($value) {
                 return trim($value);
             }, explode(',', $tags_string));
@@ -89,6 +104,7 @@ class TicketsController extends AbstractController
     public function show(Request $request, Tickets $ticket): Response
     {
       $comment = new Comment();
+      $creator = $this->getUser()->getId();
       $ticketId = $request->attributes->get('id');
 
       $commentForm = $this->createFormBuilder($comment)
@@ -100,11 +116,14 @@ class TicketsController extends AbstractController
        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
            $comment = $commentForm->getData();
            $entityManager = $this->getDoctrine()->getManager();
+           $user = $entityManager->getRepository(User::class)->find($creator);
 
            $comment->setTicket($ticket);
+           $comment->setCreator($user);
 
            $entityManager->persist($ticket);
            $entityManager->persist($comment);
+           $entityManager->persist($user);
            $entityManager->flush();
 
            echo $ticketId;

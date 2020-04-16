@@ -64,6 +64,12 @@ class Tickets
      */
     private $tags;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tickets")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $creator;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -214,6 +220,18 @@ class Tickets
             $this->tags->removeElement($tag);
             $tag->removeTicketId($this);
         }
+
+        return $this;
+    }
+
+    public function getCreator(): ?user
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?user $creator): self
+    {
+        $this->creator = $creator;
 
         return $this;
     }

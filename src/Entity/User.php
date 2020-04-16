@@ -45,9 +45,21 @@ class User implements UserInterface
      */
     private $projects;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Tickets", mappedBy="creator", orphanRemoval=true)
+     */
+    private $tickets;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="creator", orphanRemoval=true)
+     */
+    private $comments;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
+        $this->tickets = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     
@@ -167,6 +179,68 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($project->getCreator() === $this) {
                 $project->setCreator(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Tickets[]
+     */
+    public function getTickets(): Collection
+    {
+        return $this->tickets;
+    }
+
+    public function addTicket(Tickets $ticket): self
+    {
+        if (!$this->tickets->contains($ticket)) {
+            $this->tickets[] = $ticket;
+            $ticket->setCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTicket(Tickets $ticket): self
+    {
+        if ($this->tickets->contains($ticket)) {
+            $this->tickets->removeElement($ticket);
+            // set the owning side to null (unless already changed)
+            if ($ticket->getCreator() === $this) {
+                $ticket->setCreator(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getCreator() === $this) {
+                $comment->setCreator(null);
             }
         }
 
